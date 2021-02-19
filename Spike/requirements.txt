@@ -1,2 +1,4 @@
-Flask~=1.1
-FLASK_ENV=development
+dnspython==1.16.0
+Flask==1.1.2
+Flask-PyMongo==2.3.0
+gunicorn==19.10.0
