@@ -7,6 +7,7 @@ from flask import render_template, jsonify, request
 from Spike import app, mongo
 from Spike.OrderModel import updateOrderInfo
 from Spike.UserModel import ifUserNotExist, create_new_account, verifyAccount, updateUserInfo, getUserInfo
+from Spike.MealModel import addNewMeal
 
 
 @app.route('/')
@@ -72,6 +73,32 @@ def update_account():
     result = {"Status": status, "Reason": msg}
 
     return jsonify(result)
+
+
+##########################################################################
+######################### Admin Actions APIs #############################
+
+@app.route('/AddItem', methods=['GET', 'POST'])
+def add_item():
+    req = request.get_json()
+    info_map = {}
+    for k in req:
+        if k == "Name":
+            info_map["Name"] = req[k]
+        elif k == "Picture":
+            info_map["Picture"] = req[k]
+        elif k == "Cost":
+            info_map["Cost"] = req[k]
+        elif k == "Availability":
+            info_map["Availability"] = req[k]
+    status, msg = addNewMeal(req)
+    result = {"Status": status, "Reason": msg}
+
+    return jsonify(result)
+
+@app.route('/UpdateItem')
+def update_item():
+    pass
 
 
 ##########################################################################

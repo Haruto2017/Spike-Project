@@ -15,8 +15,16 @@ class Meal:
         menu_list = mongo.db.Menu
         menu_list.insert_one(
             {'MealID': self.MealID, 'MealName': self.MealName, 'Picture': self.Picture, 'Cost': self.Cost,
-             'Avaibility': self.Availability})
+             'Availability': self.Availability})
 
+def addNewMeal(info_map):
+    name = info_map["Name"]
+    picture = info_map["Picture"]
+    cost = info_map["Cost"]
+    avaibility = info_map["Availability"]
+    meal = Meal("", picture, cost,avaibility)
+    meal.insertMenu()
+    return True, "Success"
 
 def DeleteOneMenuByQuery(Query):
     menu_list = mongo.db.Menu
