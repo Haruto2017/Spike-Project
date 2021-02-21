@@ -17,13 +17,13 @@ class Meal:
              'Availability': self.Availability})
 
 
-def DeleteOneMenuByQuery(Query):
-    menu_list = mongo.db.Menu
+def DeleteOneMealByQuery(Query):
+    menu_list = mongo.db.Meal
     res = menu_list.delete_one(Query)
     return True, "Success delete {} item".format(res.deleted_count)
 
 
-def DeleteManyMenusByQuery(Query):
-    menu_list = mongo.db.Menu
+def DeleteManyMealsByQuery(Query):
+    menu_list = mongo.db.Meal
     res = menu_list.delete_many(Query)
     return True, "Success delete {} item".format(res.deleted_count)
