@@ -16,6 +16,15 @@ class Meal:
             {'MealID': self.MealID, 'MealName': self.MealName, 'Picture': self.Picture, 'Cost': self.Cost,
              'Availability': self.Availability})
 
+def GetAllItems():
+    menu_list = mongo.db.Meal
+    res = menu_list.find()
+    result = []
+    for x in res:
+        print(x)
+        del x["_id"]
+        result.append(x)
+    return result
 
 def DeleteOneMealByQuery(Query):
     menu_list = mongo.db.Meal

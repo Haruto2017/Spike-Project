@@ -5,19 +5,20 @@ Routes and views for the flask application.
 from datetime import datetime
 from flask import render_template, jsonify, request
 from Spike import app, mongo
+from Spike.MealModel import GetAllItems
 from Spike.OrderModel import updateOrderInfo
 from Spike.UserModel import ifUserNotExist, create_new_account, verifyAccount, updateUserInfo, getUserInfo
 
 
-@app.route('/')
-@app.route('/home')
-def home():
-    """Renders the home page."""
-    return render_template(
-        'index.html',
-        title='Home Page',
-        year=datetime.now().year,
-    )
+# @app.route('/')
+# @app.route('/home')
+# def home():
+#     """Renders the home page."""
+#     return render_template(
+#         'index.html',
+#         title='Home Page',
+#         year=datetime.now().year,
+#     )
 
 
 ############################ Accounts APIs ###############################
@@ -76,6 +77,17 @@ def update_account():
 
 ##########################################################################
 
+############################ Customer Actions APIs ####################
+@app.route('/ViewMenu', methods=['GET', 'POST'])
+def view_menu():
+    result = GetAllItems()
+    return jsonify(result)
+
+
+##########################################################################
+
+
+
 ############################ Pick Up Information APIs ####################
 @app.route('/AddPickUpInfo', methods=['GET', 'POST'])
 def add_pick_up_info():
@@ -101,16 +113,6 @@ def contact():
         message='Your contact page.'
     )
 
-
-@app.route('/ViewMenu')
-def view_menu():
-    """Renders the contact page."""
-    result = {}
-    food_items = [["12343", "dish1", "imageUrl1", "10", "Available"],
-                  ["12452", "dish2", "imageUrl2", "24", "Unavailable"]]
-    result["Menu"] = food_items
-    result["Length"] = len(food_items)
-    return jsonify(result)
 
 
 @app.route('/about')
