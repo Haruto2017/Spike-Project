@@ -28,7 +28,7 @@ from Spike.MealModel import addNewMeal, updateMealInfo
 @app.route('/CreateAccount', methods=['GET', 'POST'])
 def create_account():
     req = request.get_json()
-    status, msg = ifUserNotExist(req["Username"])
+    status, msg = ifUserNotExist(req["UserName"])
     result = {"Status": status, "Reason": msg}
     if status is False:
         return jsonify(result)
@@ -41,7 +41,7 @@ def create_account():
 @app.route('/VerifyAccount', methods=['GET', 'POST'])
 def verify_account():
     req = request.get_json()
-    status, msg = verifyAccount(req["Username"], req["Password"])
+    status, msg = verifyAccount(req["UserName"], req["Password"])
     result = {"Status": status, "Reason": msg}
 
     return jsonify(result)
@@ -50,7 +50,7 @@ def verify_account():
 @app.route('/GetAccountInfo', methods=['GET', 'POST'])
 def get_account_info():
     req = request.get_json()
-    result = getUserInfo(req["Username"])
+    result = getUserInfo(req["UserName"])
     return jsonify(result)
 
 
@@ -58,10 +58,10 @@ def get_account_info():
 def update_account():
     req = request.get_json()
     info_map = {}
-    userName = None
+    UserName = None
     for k in req:
-        if k == "Username":
-            userName = req[k]
+        if k == "UserName":
+            UserName = req[k]
         elif k == "Password":
             info_map["PassWord"] = req[k]
         elif k == "Role":
@@ -72,7 +72,7 @@ def update_account():
             info_map["Address"] = req[k]
         elif k == "PaymentType":
             info_map["PaymentType"] = req[k]
-    status, msg = updateUserInfo(userName, info_map)
+    status, msg = updateUserInfo(UserName, info_map)
     result = {"Status": status, "Reason": msg}
 
     return jsonify(result)
