@@ -5,6 +5,7 @@ Routes and views for the flask application.
 from datetime import datetime
 from flask import render_template, jsonify, request
 from Spike import app, mongo
+from Spike.OrderModel import updateOrderInfo
 from Spike.UserModel import ifUserNotExist, create_new_account, verifyAccount, updateUserInfo, getUserInfo
 
 
@@ -74,6 +75,20 @@ def update_account():
 
 
 ##########################################################################
+
+############################ Pick Up Information APIs ####################
+@app.route('/AddPickUpInfo', methods=['GET', 'POST'])
+def add_pick_up_info():
+    req = request.get_json()
+    order_id = req["OrderID"]
+    status, msg = updateOrderInfo(order_id, req)
+    result = {"Status": status, "Reason": msg}
+    return jsonify(result)
+
+
+##########################################################################
+
+
 
 
 @app.route('/contact')

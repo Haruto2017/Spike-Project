@@ -18,6 +18,13 @@ class Order:
              'CarDescription': self.CarDescription, 'Status': self.Status})
 
 
+def updateOrderInfo(OrderID, infoMap):
+    myquery = {"OrderID": OrderID}
+    newvalues = {"$set": infoMap}
+    mongo.db.Order.update_one(myquery, newvalues)
+    return True, "Success"
+
+
 def DeleteOneOrderByQuery(Query):
     order_list = mongo.db.Order
     res = order_list.delete_one(Query)
