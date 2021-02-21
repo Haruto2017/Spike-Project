@@ -1,19 +1,21 @@
 from Spike import app, mongo
 
 
-class Menu:
-    def __init__(self, MealID, MealName, Picture, Cost, Avaibility):
+class Meal:
+    def __init__(self, MealID, MealName, Picture, Cost, Availability):
         self.MealID = MealID
         self.MealName = MealName
         self.Picture = Picture
         self.Cost = Cost
-        self.Avaibility = Avaibility
+        self.Availability = Availability
 
     def insertMenu(self):
+        # TODO Change the table name
+        # TODO change the Availability spelling
         menu_list = mongo.db.Menu
         menu_list.insert_one(
             {'MealID': self.MealID, 'MealName': self.MealName, 'Picture': self.Picture, 'Cost': self.Cost,
-             'Avaibility': self.Avaibility})
+             'Avaibility': self.Availability})
 
 
 def DeleteOneMenuByQuery(Query):

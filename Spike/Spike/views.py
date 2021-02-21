@@ -20,7 +20,7 @@ def home():
 
 
 ############################ Accounts APIs ###############################
-@app.route('/CreateAccount')
+@app.route('/CreateAccount', method=['POST'])
 def create_account():
     req = request.get_json()
     status, msg = ifUserNotExist(req["Username"])

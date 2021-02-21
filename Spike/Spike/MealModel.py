@@ -1,13 +1,14 @@
 from Spike import app, mongo
 
 
-class Meal:
+class OrderContent:
     def __init__(self, OrderID, MealID, Priority):
         self.OrderID = OrderID
         self.MealID = MealID
         self.Priority = Priority
 
     def insertMeal(self):
+        # TODO change table name
         meal_list = mongo.db.Meal
         meal_list.insert_one({'OrderID': self.OrderID, 'MealID': self.MealID, 'Priority': self.Priority})
 
