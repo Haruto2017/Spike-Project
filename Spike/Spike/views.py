@@ -6,7 +6,9 @@ from datetime import datetime
 from flask import render_template, jsonify, request
 from Spike import app, mongo
 from Spike.MealModel import GetAllItems
-from Spike.OrderModel import updateOrderInfo
+from Spike.OrderHistoryModel import CreateOrderHistory
+from Spike.OrderModel import updateOrderInfo, CreateNewOrder, GetOrderHistoryByName, GetOrderHistoryByID, \
+    GetAllActiveOrderByName
 from Spike.UserModel import ifUserNotExist, create_new_account, verifyAccount, updateUserInfo, getUserInfo
 from Spike.MealModel import addNewMeal, updateMealInfo
 
@@ -52,7 +54,7 @@ def get_account_info():
     return jsonify(result)
 
 
-@app.route('/UpdateAccount',  methods = ['GET', 'POST'])
+@app.route('/UpdateAccount', methods=['GET', 'POST'])
 def update_account():
     req = request.get_json()
     info_map = {}
@@ -77,6 +79,55 @@ def update_account():
 
 
 ##########################################################################
+
+
+############################ Customer Actions APIs ####################
+@app.route('/ViewMenu', methods=['GET', 'POST'])
+def view_menu():
+    result = GetAllItems()
+    return jsonify(result)
+
+
+@app.route('/CreateOrder', methods=['GET', 'POST'])
+def create_order():
+    req = request.get_json()
+    UserName = req["UserName"]
+    foodItems = req["FoodItems"]
+    date = req["DateCreated"]
+    orderID, year, month, day = CreateNewOrder(UserName, date)
+    status = CreateOrderHistory(orderID, year, month, day, foodItems)
+    result = {"Status": status, "OrderID": orderID, "Reason": "Order Success"}
+
+    return jsonify(result)
+
+
+@app.route('/GetOrderHistory', methods=['GET', 'POST'])
+def get_order_history():
+    req = request.get_json()
+    UserName = req["UserName"]
+    result = GetOrderHistoryByName(UserName)
+    return jsonify(result)
+
+
+@app.route('/GetReceipt', methods=['GET', 'POST'])
+def get_receipt():
+    req = request.get_json()
+    OrderID = req["OrderID"]
+    result = GetOrderHistoryByID(OrderID)
+    return jsonify(result)
+
+
+@app.route('/ViewActiveOrders', methods=['GET', 'POST'])
+def view_active_orders():
+    req = request.get_json()
+    UserName = req["UserName"]
+    result = GetAllActiveOrderByName(UserName)
+    return jsonify(result)
+
+
+##########################################################################
+
+
 ######################### Admin Actions APIs #############################
 
 @app.route('/AddItem', methods=['GET', 'POST'])
@@ -96,6 +147,7 @@ def add_item():
     result = {"Status": status, "Reason": msg}
 
     return jsonify(result)
+
 
 @app.route('/UpdateItem', methods=['GET', 'POST'])
 def update_item():
@@ -119,16 +171,6 @@ def update_item():
 
 ##########################################################################
 
-############################ Customer Actions APIs ####################
-@app.route('/ViewMenu', methods=['GET', 'POST'])
-def view_menu():
-    result = GetAllItems()
-    return jsonify(result)
-
-
-##########################################################################
-
-
 
 ############################ Pick Up Information APIs ####################
 @app.route('/AddPickUpInfo', methods=['GET', 'POST'])
@@ -143,8 +185,6 @@ def add_pick_up_info():
 ##########################################################################
 
 
-
-
 @app.route('/contact')
 def contact():
     """Renders the contact page."""
@@ -154,7 +194,6 @@ def contact():
         year=datetime.now().year,
         message='Your contact page.'
     )
-
 
 
 @app.route('/about')

@@ -12,7 +12,16 @@ class OrderHistory:
 
     def insertOrderContent(self):
         orderContent_list = mongo.db.OrderHistory
-        orderContent_list.insert_one({'OrderID': self.OrderID, 'MealID': self.MealID, 'Priority': self.Priority, "Year": self.Year, "Month": self.Month, "Day": self.Day})
+        orderContent_list.insert_one(
+            {'OrderID': self.OrderID, 'MealID': self.MealID, 'Priority': self.Priority, "Year": self.Year,
+             "Month": self.Month, "Day": self.Day})
+
+
+def CreateOrderHistory(OrderID, Year, Month, Day, foodItems):
+    for foodID in foodItems:
+        orderHis = OrderHistory(OrderID, foodID, "3", Year, Month, Day)
+        orderHis.insertOrderContent()
+    return True
 
 
 def DeleteOrderContentByQuery(Query):

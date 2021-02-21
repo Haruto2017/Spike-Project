@@ -22,15 +22,17 @@ def addNewMeal(info_map):
     picture = info_map["Picture"]
     cost = info_map["Cost"]
     availability = info_map["Availability"]
-    meal = Meal("", name, picture, cost,availability)
+    meal = Meal("", name, picture, cost, availability)
     meal.insertMenu()
     return True, "Success"
+
 
 def updateMealInfo(MealName, info_map):
     myquery = {"MealName": MealName}
     newvalues = {"$set": info_map}
     mongo.db.Meal.update_one(myquery, newvalues)
     return True, "Success"
+
 
 def GetAllItems():
     menu_list = mongo.db.Meal
@@ -41,6 +43,7 @@ def GetAllItems():
         del x["_id"]
         result.append(x)
     return result
+
 
 def DeleteOneMealByQuery(Query):
     menu_list = mongo.db.Meal

@@ -18,6 +18,44 @@ class Order:
              'CarDescription': self.CarDescription, 'Status': self.Status})
 
 
+def CreateNewOrder(UserName, CreateTime):
+    dates_stamp = CreateTime.split(" ")
+    dates = dates_stamp[0].split("-")
+    year, month, day = dates[0], dates[1], dates[2]
+    orderID = UserName + CreateTime
+    order = Order(orderID, UserName, CreateTime, "", "", "Incomplete")
+    order.insertOrder()
+
+    return orderID, year, month, day
+
+
+def GetOrderHistoryByName(UserName):
+    myquery = {"UserName": UserName}
+    orders = mongo.db.Order.find(myquery)
+    result = []
+    for order in orders:
+        del order["_id"]
+        result.append(order)
+    return result
+
+def GetAllActiveOrderByName(UserName):
+    myquery = {"UserName": UserName, "Status": "Incomplete"}
+    orders = mongo.db.Order.find(myquery)
+    result = []
+    for order in orders:
+        result.append(order["OrderID"])
+    return result
+
+def GetOrderHistoryByID(OrderID):
+    myquery = {"OrderID": OrderID}
+    orders = mongo.db.Order.find(myquery)
+    result = []
+    for order in orders:
+        del order["_id"]
+        result.append(order)
+    return result
+
+
 def updateOrderInfo(OrderID, infoMap):
     myquery = {"OrderID": OrderID}
     newvalues = {"$set": infoMap}
