@@ -9,30 +9,46 @@ class Meal:
         self.Cost = Cost
         self.Availability = Availability
 
-    def insertMenu(self):
+    def insertMeal(self):
         # TODO Change the table name
-        # TODO change the Availability spelling
-        menu_list = mongo.db.Menu
-        menu_list.insert_one(
+        meal_list = mongo.db.Meal
+        meal_list.insert_one(
             {'MealID': self.MealID, 'MealName': self.MealName, 'Picture': self.Picture, 'Cost': self.Cost,
              'Availability': self.Availability})
+
 
 def addNewMeal(info_map):
     name = info_map["Name"]
     picture = info_map["Picture"]
     cost = info_map["Cost"]
-    avaibility = info_map["Availability"]
-    meal = Meal("", picture, cost,avaibility)
+    availability = info_map["Availability"]
+    meal = Meal("", name, picture, cost,availability)
     meal.insertMenu()
     return True, "Success"
 
-def DeleteOneMenuByQuery(Query):
-    menu_list = mongo.db.Menu
+def updateMealInfo(MealName, info_map):
+    myquery = {"MealName": MealName}
+    newvalues = {"$set": info_map}
+    mongo.db.Meal.update_one(myquery, newvalues)
+    return True, "Success"
+
+def GetAllItems():
+    menu_list = mongo.db.Meal
+    res = menu_list.find()
+    result = []
+    for x in res:
+        print(x)
+        del x["_id"]
+        result.append(x)
+    return result
+
+def DeleteOneMealByQuery(Query):
+    menu_list = mongo.db.Meal
     res = menu_list.delete_one(Query)
     return True, "Success delete {} item".format(res.deleted_count)
 
 
-def DeleteManyMenusByQuery(Query):
-    menu_list = mongo.db.Menu
+def DeleteManyMealsByQuery(Query):
+    menu_list = mongo.db.Meal
     res = menu_list.delete_many(Query)
     return True, "Success delete {} item".format(res.deleted_count)
