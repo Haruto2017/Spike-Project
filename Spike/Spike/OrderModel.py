@@ -2,9 +2,9 @@ from Spike import app, mongo
 
 
 class Order:
-    def __init__(self, OrderID, UserID, CreatedTime, TimetoPickUp, CarDescription, Status):
+    def __init__(self, OrderID, UserName, CreatedTime, TimetoPickUp, CarDescription, Status):
         self.OrderID = OrderID
-        self.UserID = UserID
+        self.UserName = UserName
         self.CreatedTime = CreatedTime
         self.TimetoPickUp = TimetoPickUp
         self.CarDescription = CarDescription
@@ -13,7 +13,7 @@ class Order:
     def insertOrder(self):
         order_list = mongo.db.Order
         order_list.insert_one(
-            {'OrderID': self.OrderID, 'UserID': self.UserID, 'CreatedTime': self.CreatedTime,
+            {'OrderID': self.OrderID, 'UserName': self.UserName, 'CreatedTime': self.CreatedTime,
              'TimetoPickUp': self.TimetoPickUp,
              'CarDescription': self.CarDescription, 'Status': self.Status})
 

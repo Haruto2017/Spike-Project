@@ -9,13 +9,12 @@ class Meal:
         self.Cost = Cost
         self.Availability = Availability
 
-    def insertMenu(self):
+    def insertMeal(self):
         # TODO Change the table name
-        # TODO change the Availability spelling
-        menu_list = mongo.db.Menu
-        menu_list.insert_one(
+        meal_list = mongo.db.Meal
+        meal_list.insert_one(
             {'MealID': self.MealID, 'MealName': self.MealName, 'Picture': self.Picture, 'Cost': self.Cost,
-             'Avaibility': self.Availability})
+             'Availability': self.Availability})
 
 
 def DeleteOneMenuByQuery(Query):
