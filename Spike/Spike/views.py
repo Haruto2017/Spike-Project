@@ -5,7 +5,7 @@ Routes and views for the flask application.
 from datetime import datetime
 from flask import render_template, jsonify, request
 from Spike import app, mongo
-from Spike.UserModel import ifUserNotExist, create_new_account, verifyAccount, updateUserInfo
+from Spike.UserModel import ifUserNotExist, create_new_account, verifyAccount, updateUserInfo, getUserInfo
 
 
 @app.route('/')
@@ -20,7 +20,7 @@ def home():
 
 
 ############################ Accounts APIs ###############################
-@app.route('/CreateAccount', method=['POST'])
+@app.route('/CreateAccount', methods=['GET', 'POST'])
 def create_account():
     req = request.get_json()
     status, msg = ifUserNotExist(req["Username"])
@@ -33,7 +33,7 @@ def create_account():
     return jsonify(result)
 
 
-@app.route('/VerifyAccount')
+@app.route('/VerifyAccount', methods=['GET', 'POST'])
 def verify_account():
     req = request.get_json()
     status, msg = verifyAccount(req["Username"], req["Password"])
@@ -42,7 +42,14 @@ def verify_account():
     return jsonify(result)
 
 
-@app.route('/UpdateAccount')
+@app.route('/GetAccountInfo', methods=['GET', 'POST'])
+def get_account_info():
+    req = request.get_json()
+    result = getUserInfo(req["Username"])
+    return jsonify(result)
+
+
+@app.route('/UpdateAccount',  methods = ['GET', 'POST'])
 def update_account():
     req = request.get_json()
     info_map = {}

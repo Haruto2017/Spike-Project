@@ -36,6 +36,26 @@ def updateUserInfo(UserName, infoMap):
     return True, "Success"
 
 
+
+def getUserInfo(UserName):
+    myquery = {"UserName": UserName}
+    users = mongo.db.User.find(myquery)
+
+    length = users.count()
+    if length <= 0:
+        return {'UserName': "", 'Role': "",
+                'PaymentType': "",
+                'Phone': "", 'Address': "",
+                "Reason": "UserName not Exist", "Status": False}
+    user = users[0]
+    result = {"UserName": user["UserName"], "Role": user["Role"], "PaymentType": user["PaymentType"],
+              "Phone": user["Phone"], "Address": user["Address"],
+              "Reason": "success", "Status": True}
+
+
+    return result
+
+
 def ifUserNotExist(UserName):
     # While creating a new account, check whether a UserName has existed
     myquery = {"UserName": UserName}
