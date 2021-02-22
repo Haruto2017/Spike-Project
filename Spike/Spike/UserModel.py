@@ -75,7 +75,7 @@ def verifyAccount(UserName, PassWord):
         return False, "User Not Exist"
     if length > 1:
         return False, "Duplicated User"
-    if users[0]["Password"] != PassWord:
+    if users[0]["PassWord"] != PassWord:
         return False, "Wrong PassWord"
     return True, "Success"
 
