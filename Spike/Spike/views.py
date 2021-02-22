@@ -171,6 +171,18 @@ def update_item():
 
     return jsonify(result)
 
+@app.route('/UpdateOrder', methods=['GET', 'POST'])
+def update_order():
+    req = request.get_json()
+    OrderID = req["OrderID"]
+    info_map = {}
+    info_map["Status"] = req["Status"]
+    status, msg = updateOrderInfo(OrderID, info_map)
+    result = {"Status": status, "Reason": msg}
+    return jsonify(result)
+
+
+
 
 ##########################################################################
 
