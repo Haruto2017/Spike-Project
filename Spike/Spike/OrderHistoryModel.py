@@ -1,4 +1,5 @@
 from Spike import app, mongo
+from Spike.MealModel import getMealByID
 
 
 class OrderHistory:
@@ -15,6 +16,18 @@ class OrderHistory:
         orderContent_list.insert_one(
             {'OrderID': self.OrderID, 'MealID': self.MealID, 'Priority': self.Priority, "Year": self.Year,
              "Month": self.Month, "Day": self.Day})
+
+def getAllMealByOrderID(OrderID):
+    myquery = {"OrderID": OrderID}
+    mealNameList = []
+    moneyNum = 0
+    orders = mongo.db.OrderHistory.find(myquery)
+    for order in orders:
+        meal_name, money = getMealByID(order["MealID"])
+        mealNameList.append(meal_name)
+        moneyNum += float(money)
+    return mealNameList, str(moneyNum) + "$"
+
 
 
 def CreateOrderHistory(OrderID, Year, Month, Day, foodItems):

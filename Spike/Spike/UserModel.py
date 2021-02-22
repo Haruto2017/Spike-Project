@@ -19,12 +19,13 @@ class User:
 
 
 def create_new_account(info_map):
-    userName = info_map["Username"]
-    passWord = info_map["Password"]
+    userName = info_map["UserName"]
+    passWord = info_map["PassWord"]
     phone = info_map["Phone"]
     role = info_map["Role"]
     address = info_map["Address"]
-    user = User("", userName, role, "", passWord, phone, address)
+    payment = info_map["PaymentType"]
+    user = User("", userName, role, payment, passWord, phone, address)
     user.insertUser()
     return True, "Success"
 

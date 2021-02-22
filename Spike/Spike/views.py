@@ -6,7 +6,7 @@ from datetime import datetime
 from flask import render_template, jsonify, request
 from Spike import app, mongo
 from Spike.MealModel import GetAllItems
-from Spike.OrderHistoryModel import CreateOrderHistory
+from Spike.OrderHistoryModel import CreateOrderHistory, getAllMealByOrderID
 from Spike.OrderModel import updateOrderInfo, CreateNewOrder, GetOrderHistoryByName, GetOrderHistoryByID, \
     GetAllActiveOrderByName
 from Spike.UserModel import ifUserNotExist, create_new_account, verifyAccount, updateUserInfo, getUserInfo
@@ -106,6 +106,8 @@ def get_order_history():
     req = request.get_json()
     UserName = req["UserName"]
     result = GetOrderHistoryByName(UserName)
+    for r in result:
+        r["FoodItems"], r["TotalCost"] = getAllMealByOrderID(r["OrderID"])
     return jsonify(result)
 
 
@@ -114,6 +116,7 @@ def get_receipt():
     req = request.get_json()
     OrderID = req["OrderID"]
     result = GetOrderHistoryByID(OrderID)
+    result[0]["FoodItems"], result[0]["TotalCost"] = getAllMealByOrderID(OrderID)
     return jsonify(result)
 
 
