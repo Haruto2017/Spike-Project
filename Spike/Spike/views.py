@@ -41,7 +41,7 @@ def create_account():
 @app.route('/VerifyAccount', methods=['GET', 'POST'])
 def verify_account():
     req = request.get_json()
-    status, msg = verifyAccount(req["UserName"], req["Password"])
+    status, msg = verifyAccount(req["UserName"], req["PassWord"])
     result = {"Status": status, "Reason": msg}
 
     return jsonify(result)
@@ -62,7 +62,7 @@ def update_account():
     for k in req:
         if k == "UserName":
             UserName = req[k]
-        elif k == "Password":
+        elif k == "PassWord":
             info_map["PassWord"] = req[k]
         elif k == "Role":
             info_map["Role"] = req[k]
