@@ -138,8 +138,8 @@ def add_item():
     req = request.get_json()
     info_map = {}
     for k in req:
-        if k == "Name":
-            info_map["Name"] = req[k]
+        if k == "MealName":
+            info_map["MealName"] = req[k]
         elif k == "Picture":
             info_map["Picture"] = req[k]
         elif k == "Cost":
@@ -158,8 +158,9 @@ def update_item():
     info_map = {}
     mealName = None
     for k in req:
-        if k == "Name":
-            info_map["Name"] = req[k]
+        if k == "MealName":
+            mealName = req[k]
+            info_map["MealName"] = req[k]
         elif k == "Picture":
             info_map["Picture"] = req[k]
         elif k == "Cost":

@@ -18,12 +18,12 @@ class Meal:
 
 
 def addNewMeal(info_map):
-    name = info_map["Name"]
+    name = info_map["MealName"]
     picture = info_map["Picture"]
     cost = info_map["Cost"]
     availability = info_map["Availability"]
     meal = Meal("", name, picture, cost, availability)
-    meal.insertMenu()
+    meal.insertMeal()
     return True, "Success"
 
 def getMealByID(MealID):
