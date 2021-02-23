@@ -184,6 +184,21 @@ def update_order():
     result = {"Status": status, "Reason": msg}
     return jsonify(result)
 
+@app.route('/UpdateOrderPriority', methods=['GET', 'POST'])
+def update_order_priority():
+    req = request.get_json()
+    OrderID = req["OrderID"]
+    info_map = {}
+    info_map["Priority"] = req["Priority"]
+    status, msg = updateOrderHistoryInfo(OrderID, info_map)
+    result = {"Status": status, "Reason": msg}
+    return jsonify(result)
+
+@app.route('/PrintOrderByPriority', methods=['GET', 'POST'])
+def print_order_by_priority():
+    result = printOrderByPriority()
+    return jsonify(result)
+
 @app.route('/PrintUsageReport', methods=['GET', 'POST'])
 def print_usage_report():
     req = request.get_json()
