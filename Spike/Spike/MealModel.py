@@ -27,10 +27,12 @@ def addNewMeal(info_map):
     meal.insertMeal()
     return True, "Success"
 
+
 def getMealByID(MealID):
     myquery = {"MealID": MealID}
     meal = mongo.db.Meal.find(myquery)
     return meal[0]["MealName"], meal[0]["Cost"][:-1]
+
 
 def updateMealInfo(OriginalName, info_map):
     myquery = {"MealName": OriginalName}
