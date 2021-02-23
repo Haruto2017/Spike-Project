@@ -18,11 +18,12 @@ class Meal:
 
 
 def addNewMeal(info_map):
+    mealId = str(mongo.db.Meal.find().count()+1)
     name = info_map["MealName"]
     picture = info_map["Picture"]
     cost = info_map["Cost"]
     availability = info_map["Availability"]
-    meal = Meal("", name, picture, cost, availability)
+    meal = Meal(mealId, name, picture, cost, availability)
     meal.insertMeal()
     return True, "Success"
 
@@ -31,8 +32,8 @@ def getMealByID(MealID):
     meal = mongo.db.Meal.find(myquery)
     return meal[0]["MealName"], meal[0]["Cost"][:-1]
 
-def updateMealInfo(MealName, info_map):
-    myquery = {"MealName": MealName}
+def updateMealInfo(OriginalName, info_map):
+    myquery = {"MealName": OriginalName}
     newvalues = {"$set": info_map}
     mongo.db.Meal.update_one(myquery, newvalues)
     return True, "Success"

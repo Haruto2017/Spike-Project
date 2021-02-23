@@ -17,6 +17,10 @@ class OrderHistory:
             {'OrderID': self.OrderID, 'MealID': self.MealID, 'Priority': self.Priority, "Year": self.Year,
              "Month": self.Month, "Day": self.Day})
 
+def printUsageReport(info_map):
+    usage = mongo.db.OrderHistory.count_documents(info_map)
+    return True, usage
+
 def getAllMealByOrderID(OrderID):
     myquery = {"OrderID": OrderID}
     mealNameList = []
@@ -27,8 +31,6 @@ def getAllMealByOrderID(OrderID):
         mealNameList.append(meal_name)
         moneyNum += float(money)
     return mealNameList, str(moneyNum) + "$"
-
-
 
 def CreateOrderHistory(OrderID, Year, Month, Day, foodItems):
     for foodID in foodItems:

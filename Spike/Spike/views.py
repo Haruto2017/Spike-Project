@@ -6,7 +6,7 @@ from datetime import datetime
 from flask import render_template, jsonify, request
 from Spike import app, mongo
 from Spike.MealModel import GetAllItems
-from Spike.OrderHistoryModel import CreateOrderHistory, getAllMealByOrderID
+from Spike.OrderHistoryModel import CreateOrderHistory, getAllMealByOrderID,printUsageReport
 from Spike.OrderModel import updateOrderInfo, CreateNewOrder, GetOrderHistoryByName, GetOrderHistoryByID, \
     GetAllActiveOrderByName
 from Spike.UserModel import ifUserNotExist, create_new_account, verifyAccount, updateUserInfo, getUserInfo
@@ -146,7 +146,7 @@ def add_item():
             info_map["Cost"] = req[k]
         elif k == "Availability":
             info_map["Availability"] = req[k]
-    status, msg = addNewMeal(req)
+    status, msg = addNewMeal(info_map)
     result = {"Status": status, "Reason": msg}
 
     return jsonify(result)
@@ -156,10 +156,12 @@ def add_item():
 def update_item():
     req = request.get_json()
     info_map = {}
-    mealName = None
+    OriginalName = None
     for k in req:
-        if k == "MealName":
-            mealName = req[k]
+        if k == "OriginalName":
+            OriginalName = req[k]
+            info_map["MealName"] = req[k]
+        elif k == "NewName":
             info_map["MealName"] = req[k]
         elif k == "Picture":
             info_map["Picture"] = req[k]
@@ -167,7 +169,7 @@ def update_item():
             info_map["Cost"] = req[k]
         elif k == "Availability":
             info_map["Availability"] = req[k]
-    status, msg = updateMealInfo(mealName, req)
+    status, msg = updateMealInfo(OriginalName, info_map)
     result = {"Status": status, "Reason": msg}
 
     return jsonify(result)
@@ -182,8 +184,22 @@ def update_order():
     result = {"Status": status, "Reason": msg}
     return jsonify(result)
 
-
-
+@app.route('/PrintUsageReport', methods=['GET', 'POST'])
+def print_usage_report():
+    req = request.get_json()
+    info_map = {}
+    for k in req:
+        if k == "MealID":
+            info_map["MealID"] = req[k]
+        elif k == "Year":
+            info_map["Year"] = req[k]
+        elif k == "Month":
+            info_map["Month"] = req[k]
+        elif k == "Day":
+            info_map["Day"] = req[k]
+    status, msg = printUsageReport(info_map)
+    result = {"Status": status, "Usage": msg}
+    return jsonify(result)
 
 ##########################################################################
 
