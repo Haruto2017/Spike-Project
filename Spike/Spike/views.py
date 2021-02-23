@@ -63,7 +63,7 @@ def update_account():
         if k == "UserName":
             UserName = req[k]
         elif k == "PassWord":
-            info_map["PassWord"] = req[k]
+            info_map["Password"] = req[k]
         elif k == "Role":
             info_map["Role"] = req[k]
         elif k == "Phone":
@@ -195,6 +195,25 @@ def add_pick_up_info():
     order_id = req["OrderID"]
     status, msg = updateOrderInfo(order_id, req)
     result = {"Status": status, "Reason": msg}
+    return jsonify(result)
+
+
+##########################################################################
+
+
+############################ Restaurant Staff Actions APIs ####################
+@app.route('/UpdateMealStock', methods=['GET', 'POST'])
+def update_meal_stock():
+    req = request.get_json()
+    MealName = req["MealName"]
+    status = req["InStock"]
+    info_map = {}
+    if status is True:
+        info_map["Availability"] = "Available"
+    else:
+        info_map["Availability"] = "Unavailable"
+    status, msg = updateMealInfo(MealName, info_map)
+    result = {"Status": msg}
     return jsonify(result)
 
 
