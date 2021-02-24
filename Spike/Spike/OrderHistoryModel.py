@@ -50,6 +50,8 @@ def printOrderByPriority():
     orders = mongo.db.OrderHistory.find().sort("Priority", 1)
     result = []
     for order in orders:
+        print(order)
+        del order["_id"]
         result.append(order)
     return result
 
