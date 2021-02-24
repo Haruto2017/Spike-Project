@@ -30,6 +30,9 @@ def addNewMeal(info_map):
 def getMealIDByName(MealName):
     myquery = {"MealName": MealName}
     meal = mongo.db.Meal.find(myquery)
+    n = meal.count()
+    if n == 0:
+        return False
     return meal[0]["MealID"]
 
 def getMealByID(MealID):

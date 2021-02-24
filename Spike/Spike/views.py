@@ -207,6 +207,9 @@ def print_usage_report():
     for k in req:
         if k == "MealName":
             MealID = getMealIDByName(req[k])
+            if MealID == False:
+                result = {"Status": False, "Reason": "Item is not existed"}
+                return jsonify(result)
             info_map["MealID"] = MealID
         elif k == "Year":
             info_map["Year"] = req[k]
