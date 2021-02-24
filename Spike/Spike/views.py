@@ -10,7 +10,7 @@ from Spike.OrderHistoryModel import CreateOrderHistory, getAllMealByOrderID,prin
 from Spike.OrderModel import updateOrderInfo, CreateNewOrder, GetOrderHistoryByName, GetOrderHistoryByID, \
     GetAllActiveOrderByName
 from Spike.UserModel import ifUserNotExist, create_new_account, verifyAccount, updateUserInfo, getUserInfo
-from Spike.MealModel import addNewMeal, updateMealInfo
+from Spike.MealModel import addNewMeal, updateMealInfo, getMealIDByName
 
 
 # @app.route('/')
@@ -189,8 +189,9 @@ def print_usage_report():
     req = request.get_json()
     info_map = {}
     for k in req:
-        if k == "MealID":
-            info_map["MealID"] = req[k]
+        if k == "MealName":
+            MealID = getMealIDByName(req[k])
+            info_map["MealID"] = MealID
         elif k == "Year":
             info_map["Year"] = req[k]
         elif k == "Month":
