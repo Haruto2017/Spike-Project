@@ -19,9 +19,8 @@ class Order:
 
 
 def CreateNewOrder(UserName, CreateTime):
-    dates_stamp = CreateTime.split(" ")
-    dates = dates_stamp[0].split("-")
-    year, month, day = dates[0], dates[1], dates[2]
+    dates = CreateTime.split(" ")
+    year, month, day = dates[3], dates[1], dates[2]
     orderID = UserName + CreateTime
     order = Order(orderID, UserName, CreateTime, "", "", "Incomplete")
     order.insertOrder()
