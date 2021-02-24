@@ -1,5 +1,6 @@
 from Spike import app, mongo
 from Spike.MealModel import getMealByID
+from Spike.OrderModel import getOrderStatus
 
 
 class OrderHistory:
@@ -51,7 +52,9 @@ def printOrderByPriority():
     result = []
     for order in orders:
         print(order)
+        temp = getOrderStatus(order["OrderID"])
         del order["_id"]
+        order["Status"] = temp
         result.append(order)
     return result
 

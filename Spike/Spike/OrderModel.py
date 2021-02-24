@@ -64,6 +64,11 @@ def updateOrderInfo(OrderID, infoMap):
     mongo.db.Order.update_one(myquery, newvalues)
     return True, "Success"
 
+def getOrderStatus(OrderID):
+    myquery = {"OrderID": OrderID}
+    orders = mongo.db.Order.find(myquery)
+    order = orders[0]
+    return order["Status"]
 
 def DeleteOneOrderByQuery(Query):
     order_list = mongo.db.Order
