@@ -6,7 +6,8 @@ from datetime import datetime
 from flask import render_template, jsonify, request
 from Spike import app, mongo
 from Spike.MealModel import GetAllItems
-from Spike.OrderHistoryModel import CreateOrderHistory, getAllMealByOrderID,printUsageReport
+from Spike.OrderHistoryModel import CreateOrderHistory, getAllMealByOrderID, printUsageReport, updateOrderHistoryInfo, \
+    printOrderByPriority
 from Spike.OrderModel import updateOrderInfo, CreateNewOrder, GetOrderHistoryByName, GetOrderHistoryByID, \
     GetAllActiveOrderByName
 from Spike.UserModel import ifUserNotExist, create_new_account, verifyAccount, updateUserInfo, getUserInfo
@@ -182,6 +183,21 @@ def update_order():
     info_map["Status"] = req["Status"]
     status, msg = updateOrderInfo(OrderID, info_map)
     result = {"Status": status, "Reason": msg}
+    return jsonify(result)
+
+@app.route('/UpdateOrderPriority', methods=['GET', 'POST'])
+def update_order_priority():
+    req = request.get_json()
+    OrderID = req["OrderID"]
+    info_map = {}
+    info_map["Priority"] = req["Priority"]
+    status, msg = updateOrderHistoryInfo(OrderID, info_map)
+    result = {"Status": status, "Reason": msg}
+    return jsonify(result)
+
+@app.route('/PrintOrderByPriority', methods=['GET', 'POST'])
+def print_order_by_priority():
+    result = printOrderByPriority()
     return jsonify(result)
 
 @app.route('/PrintUsageReport', methods=['GET', 'POST'])

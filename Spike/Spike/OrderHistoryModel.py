@@ -38,6 +38,18 @@ def CreateOrderHistory(OrderID, Year, Month, Day, foodItems):
         orderHis.insertOrderContent()
     return True
 
+def updateOrderHistoryInfo(OrderID, info_map):
+    myquery = {"OrderID": OrderID}
+    newvalues = {"$set": info_map}
+    mongo.db.OrderHistory.update_one(myquery, newvalues)
+    return True, "Success"
+
+def printOrderByPriority():
+    orders = mongo.db.OrderHistory.find().sort("Priority", 1)
+    result = []
+    for order in orders:
+        result.append(order)
+    return result
 
 def DeleteOrderContentByQuery(Query):
     meal_list = mongo.db.OrderContent
