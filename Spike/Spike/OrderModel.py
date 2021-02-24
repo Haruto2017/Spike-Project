@@ -38,6 +38,7 @@ def GetOrderHistoryByName(UserName):
         result.append(order)
     return result
 
+
 def GetAllActiveOrderByName(UserName):
     myquery = {"UserName": UserName, "Status": "Incomplete"}
     orders = mongo.db.Order.find(myquery)
@@ -45,6 +46,7 @@ def GetAllActiveOrderByName(UserName):
     for order in orders:
         result.append(order["OrderID"])
     return result
+
 
 def GetOrderHistoryByID(OrderID):
     myquery = {"OrderID": OrderID}
@@ -67,6 +69,14 @@ def DeleteOneOrderByQuery(Query):
     order_list = mongo.db.Order
     res = order_list.delete_one(Query)
     return True, "Success delete {} item".format(res.deleted_count)
+
+
+def updateAllOrderUserName(OldName, NewName):
+    myquery = {"UserName": OldName}
+    info_map = {"UserName": NewName}
+    newvalues = {"$set": info_map}
+    mongo.db.Order.update_many(myquery, newvalues)
+    return
 
 
 def DeleteManyOrdersByQuery(Query):

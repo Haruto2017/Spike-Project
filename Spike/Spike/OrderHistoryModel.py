@@ -44,6 +44,8 @@ def updateOrderHistoryInfo(OrderID, info_map):
     mongo.db.OrderHistory.update_one(myquery, newvalues)
     return True, "Success"
 
+
+
 def printOrderByPriority():
     orders = mongo.db.OrderHistory.find().sort("Priority", 1)
     result = []

@@ -9,7 +9,7 @@ from Spike.MealModel import GetAllItems
 from Spike.OrderHistoryModel import CreateOrderHistory, getAllMealByOrderID, printUsageReport, updateOrderHistoryInfo, \
     printOrderByPriority
 from Spike.OrderModel import updateOrderInfo, CreateNewOrder, GetOrderHistoryByName, GetOrderHistoryByID, \
-    GetAllActiveOrderByName
+    GetAllActiveOrderByName, updateAllOrderUserName
 from Spike.UserModel import ifUserNotExist, create_new_account, verifyAccount, updateUserInfo, getUserInfo
 from Spike.MealModel import addNewMeal, updateMealInfo, getMealIDByName
 
@@ -60,10 +60,14 @@ def get_account_info():
 def update_account():
     req = request.get_json()
     info_map = {}
-    UserName = None
+    OldUserName = None
+    NewUserName = None
     for k in req:
-        if k == "UserName":
-            UserName = req[k]
+        if k == "OldUserName":
+            OldUserName = req[k]
+        elif k == "NewUserName":
+            info_map["NewUserName"] = req[k]
+            NewUserName = req[k]
         elif k == "PassWord":
             info_map["Password"] = req[k]
         elif k == "Role":
@@ -74,7 +78,9 @@ def update_account():
             info_map["Address"] = req[k]
         elif k == "PaymentType":
             info_map["PaymentType"] = req[k]
-    status, msg = updateUserInfo(UserName, info_map)
+    status, msg = updateUserInfo(OldUserName, info_map)
+    if NewUserName is not None:
+        updateAllOrderUserName(OldUserName, NewUserName)
     result = {"Status": status, "Reason": msg}
 
     return jsonify(result)
