@@ -43,6 +43,10 @@ def getMealByID(MealID):
 
 def updateMealInfo(OriginalName, info_map):
     myquery = {"MealName": OriginalName}
+    meal = mongo.db.Meal.find(myquery)
+    n = meal.count()
+    if n == 0:
+        return False, "Item is not existed"
     newvalues = {"$set": info_map}
     mongo.db.Meal.update_one(myquery, newvalues)
     return True, "Success"
