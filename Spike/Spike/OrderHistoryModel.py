@@ -61,19 +61,25 @@ def getPriority(OrderID):
 
 
 def printOrderByPriority():
-    orders = mongo.db.OrderHistory.find().sort("Priority", 1).distinct("OrderID")
+    orders = mongo.db.OrderHistory.find().sort("Priority", 1)
     result = []
+    x = orders[0]["OrderID"]
+    count = 0;
     for order in orders:
         print(order)
-        temp = getOrderStatus(order)
-        mealList = getMealList(order)
-        Priority = getPriority(order)
-        cur = []
-        cur["OrderID"] = order
-        cur["Status"] = temp
-        cur["MealIDList"] = mealList
-        cur["Priority"] = Priority
-        result.append(cur)
+        if order["OrderID"] == x:
+            count += 1
+        if count != 2:
+            temp = getOrderStatus(order["OrderID"])
+            mealList = getMealList(order["OrderID"])
+            del order["_id"]
+            del order["MealID"]
+            order["Status"] = temp
+            order["MealIDList"] = mealList
+            result.append(order)
+        if order["OrderID"] != x:
+            x = order["OrderID"]
+            count = 0
     return result
 
 def DeleteOrderContentByQuery(Query):
