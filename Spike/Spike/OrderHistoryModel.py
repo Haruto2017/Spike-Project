@@ -45,17 +45,35 @@ def updateOrderHistoryInfo(OrderID, info_map):
     mongo.db.OrderHistory.update_one(myquery, newvalues)
     return True, "Success"
 
+def getMealList(OrderID):
+    myquery = {"OrderID": OrderID}
+    orders = mongo.db.OrderHistory.find(myquery)
+    result = []
+    for order in orders:
+        result.append(order["MealID"])
+    return result
+
+def getPriority(OrderID):
+    myquery = {"OrderID": OrderID}
+    orders = mongo.db.OrderHistory.find(myquery)
+    order = orders[0]
+    return order["Priority"]
 
 
 def printOrderByPriority():
-    orders = mongo.db.OrderHistory.find().sort("Priority", 1)
+    orders = mongo.db.OrderHistory.find().sort("Priority", 1).distinct("OrderID")
     result = []
     for order in orders:
         print(order)
-        temp = getOrderStatus(order["OrderID"])
-        del order["_id"]
-        order["Status"] = temp
-        result.append(order)
+        temp = getOrderStatus(order)
+        mealList = getMealList(order)
+        Priority = getPriority(order)
+        cur = []
+        cur["OrderID"] = order
+        cur["Status"] = temp
+        cur["MealIDList"] = mealList
+        cur["Priority"] = Priority
+        result.append(cur)
     return result
 
 def DeleteOrderContentByQuery(Query):
