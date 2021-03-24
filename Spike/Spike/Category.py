@@ -1,6 +1,6 @@
 from Spike import app, mongo
 
-class Incident:
+class Category:
     def __init__(self, IncidentID, Category):
         self.IncidentID = IncidentID
         self.Category = Category
