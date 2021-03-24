@@ -5,7 +5,7 @@ class Category:
         self.IncidentID = IncidentID
         self.Category = Category
 
-    def insertIncident(self):
+    def insertCategory(self):
         order_list = mongo.db.Category
         order_list.insert_one(
             {'IncidentID': self.IncidentID, 'Category' : self.Category})
