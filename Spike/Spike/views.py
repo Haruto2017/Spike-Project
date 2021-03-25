@@ -4,7 +4,7 @@ Routes and views for the flask application.
 
 from flask import render_template, jsonify, request
 from Spike import app, mongo
-from Spike.Incident import InsertIncident, DeleteIncidentById, FindByCategory, FindReportsByDate
+from Spike.Incident import InsertIncident, DeleteIncidentById, FindByCategory, FindReportsByDate, FindReportsByStreet
 
 
 # @app.route('/')
@@ -26,10 +26,7 @@ def report_create():
     if IncidentID is None:
         return jsonify(result)
 
-    State = req.get("State")
-    if State is None:
-        return jsonify(result)
-    steerName = req.get("steerName")
+    steerName = req.get("StreetName")
     if steerName is None:
         return jsonify(result)
     Location = req.get("Location")
@@ -47,10 +44,10 @@ def report_create():
     Description = req.get("Description")
     if Description is None:
         return jsonify(result)
-    Category = req.get("Description")
+    Category = req.get("Category")
     if Category is None:
         return jsonify(result)
-    result = InsertIncident(IncidentID, State, Location, Description, Category, Year, Month, Day, steerName)
+    result = InsertIncident(IncidentID, Location, Description, Category, Year, Month, Day, steerName)
     return jsonify(result)
 
 
@@ -80,30 +77,38 @@ def getReportByCategory():
 def getReportByDate():
     result = {"Status": False, "Msg": "Date is lack of information"}
     req = request.get_json()
-    Year = req.get("Year")
-    if Year is None:
+    BeginYear = req.get("BeginYear")
+    if BeginYear is None:
         return jsonify(result)
-    Month = req.get("Month")
-    if Month is None:
+    BeginMonth = req.get("BeginMonth")
+    if BeginMonth is None:
         return jsonify(result)
-    Day = req.get("Day")
-    if Day is None:
+    BeginDay = req.get("BeginDay")
+    if BeginDay is None:
         return jsonify(result)
-    FindReportsByDate(Year, Month, Day)
-    result = {"Status": True, "Msg": "Success"}
+    EndYear = req.get("EndYear")
+    if EndYear is None:
+        return jsonify(result)
+    EndMonth = req.get("EndMonth")
+    if EndMonth is None:
+        return jsonify(result)
+    EndDay = req.get("EndDay")
+    if BeginDay is None:
+        return jsonify(result)
+    data = FindReportsByDate(BeginYear, BeginMonth, BeginDay, EndYear, EndMonth, EndDay)
+    result= {"Status": True, "Msg": "Success", "Data": data}
     return jsonify(result)
 
 
 @app.route('/getReportByLocation', methods=('GET', 'POST'))
 def getReportByLocation():
-    result = {"Status": False, "Msg": "Date is lack of information"}
+    result = {"Status": False, "Msg": "Date is lack of information", "Data": []}
     req = request.get_json()
-    steerName = req.get("steerName")
+    steerName = req.get("StreetName")
     if steerName is None:
         return jsonify(result)
-
-    FindReportsByDate(steerName)
-    result = {"Status": True, "Msg": "Success"}
+    data = FindReportsByStreet(steerName)
+    result = {"Status": True, "Msg": "Success", "Data": data}
     return jsonify(result)
 
 
