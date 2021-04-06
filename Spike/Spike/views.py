@@ -4,7 +4,7 @@ Routes and views for the flask application.
 
 from flask import render_template, jsonify, request
 from Spike import app, mongo
-from Spike.Incident import InsertIncident, DeleteIncidentById, FindByCategory, FindReportsByDate, FindReportsByStreet
+from Spike.Incident import InsertIncident, DeleteIncidentById, FindByCategory, FindReportsByDate, FindReportsByLocation
 
 
 # @app.route('/')
@@ -104,10 +104,20 @@ def getReportByDate():
 def getReportByLocation():
     result = {"Status": False, "Msg": "Date is lack of information", "Data": []}
     req = request.get_json()
-    steerName = req.get("StreetName")
-    if steerName is None:
+    longitude = req.get("longitude")
+    if longitude is None:
         return jsonify(result)
-    data = FindReportsByStreet(steerName)
+    latitude = req.get("latitude")
+    if latitude is None:
+        return jsonify(result)
+    longitudeDelta = req.get("longitudeDelta")
+    if longitudeDelta is None:
+        return jsonify(result)
+    latitudeDelta = req.get("latitudeDelta")
+    if latitudeDelta is None:
+        return jsonify(result)
+
+    data = FindReportsByLocation(longitude,latitude,longitudeDelta,latitudeDelta)
     result = {"Status": True, "Msg": "Success", "Data": data}
     return jsonify(result)
 
