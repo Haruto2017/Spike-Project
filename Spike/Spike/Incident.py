@@ -89,7 +89,8 @@ def FindReportsByLocation(longitude,latitude,longitudeDelta,latitudeDelta):
     for x in res:
         del x["_id"]
         print(x)
-        if longitude-longitudeDelta < x["Longitude"] < longitude+longitudeDelta and latitude-latitudeDelta < x["Latitude"] < latitude+latitudeDelta:
+        if longitude-longitudeDelta <= x["Longitude"] <= longitude+longitudeDelta and latitude-latitudeDelta <= x["Latitude"] <= latitude+latitudeDelta:
+            print(111)
             result.append(x)
 
     return result
