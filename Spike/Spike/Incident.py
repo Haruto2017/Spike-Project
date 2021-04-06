@@ -2,30 +2,32 @@ from Spike import app, mongo
 
 
 class Incident:
-    def __init__(self, IncidentID, State, Location, Year, Month, Day, Description, Category, streetName):
+    def __init__(self, IncidentID, Location, Latitude, Longitude, Year, Month, Day, Details, Category):
         self.IncidentID = IncidentID
-        # self.State = State
         self.Location = Location
-        self.StreetName = streetName
+        self.Latitude = Latitude
+        self.Longitude = Longitude
         self.Year = Year
         self.Month = Month
         self.Day = Day
-        self.Description = Description
+        self.Details = Details
         self.Category = Category
 
 
-def InsertIncident(IncidentID, Location, Description, Category, Year, Month, Day, steerName):
+def InsertIncident(IncidentID, Location, Latitude, Longitude, Year, Month, Day, Details, Category):
     order_list = mongo.db.Incident
     if findIfIncidentExist(IncidentID) is True:
         return {"Status": False, "Msg": "Incident Has Existed"}
     order_list.insert_one(
-        {'IncidentID': IncidentID, 'Location': Location,
-         'Description': Description,
+        {'IncidentID': IncidentID,
+         'Location': Location,
+         'Latitude': Latitude,
+         'Longitude': Longitude,
+         'Details': Details,
          'Category': Category,
          'Year': Year,
          'Month': Month,
          'Day': Day,
-         'StreetName': steerName
          })
     return {"Status": True, "Msg": "Success"}
 
@@ -66,7 +68,6 @@ def FindReportsByDate(Year_Start, Month_Start, Day_Start, Year_End, Month_End, D
     res = order_list.find()
     result = []
     for x in res:
-
         del x["_id"]
         print(x)
         if int(Year_Start) < int(x["Year"]) < int(Year_End):
@@ -81,12 +82,14 @@ def FindReportsByDate(Year_Start, Month_Start, Day_Start, Year_End, Month_End, D
     return result
 
 
-def FindReportsByStreet(steerName):
+def FindReportsByLocation(longitude,latitude,longitudeDelta,latitudeDelta):
     order_list = mongo.db.Incident
-    myquery = {"StreetName": steerName}
-    res = order_list.find(myquery)
+    res = order_list.find()
     result = []
     for x in res:
         del x["_id"]
-        result.append(x)
+        print(x)
+        if longitude-longitudeDelta < x["Longitude"] < longitude+longitudeDelta and latitude-latitudeDelta < x["Latitude"] < latitude+latitudeDelta:
+            result.append(x)
+
     return result
