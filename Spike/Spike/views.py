@@ -25,12 +25,14 @@ def report_create():
     IncidentID = req.get("IncidentID")
     if IncidentID is None:
         return jsonify(result)
-
-    steerName = req.get("StreetName")
-    if steerName is None:
-        return jsonify(result)
     Location = req.get("Location")
     if Location is None:
+        return jsonify(result)
+    Latitude = req.get("Latitude")
+    if Latitude is None:
+        return jsonify(result)
+    Longitude = req.get("Longitude")
+    if Longitude is None:
         return jsonify(result)
     Year = req.get("Year")
     if Year is None:
@@ -41,13 +43,13 @@ def report_create():
     Day = req.get("Day")
     if Day is None:
         return jsonify(result)
-    Description = req.get("Description")
-    if Description is None:
+    Details = req.get("Details")
+    if Details is None:
         return jsonify(result)
     Category = req.get("Category")
     if Category is None:
         return jsonify(result)
-    result = InsertIncident(IncidentID, Location, Description, Category, Year, Month, Day, steerName)
+    result = InsertIncident(IncidentID, Location, Latitude, Longitude, Year, Month, Day, Details, Category)
     return jsonify(result)
 
 
