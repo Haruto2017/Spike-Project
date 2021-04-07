@@ -1,6 +1,7 @@
 """
 Routes and views for the flask application.
 """
+import random
 
 from flask import render_template, jsonify, request
 from Spike import app, mongo
@@ -22,9 +23,10 @@ from Spike.Incident import InsertIncident, DeleteIncidentById, FindByCategory, F
 def report_create():
     req = request.get_json()
     result = {"Status": False, "Msg": "Report is lack of information"}
-    IncidentID = req.get("IncidentID")
-    if IncidentID is None:
-        return jsonify(result)
+    # IncidentID = req.get("IncidentID")
+    # if IncidentID is None:
+    #     return jsonify(result)
+    id = random.choice('abcdefghijklmnopqrstuvwxyz!@#$%^&*()')
     Location = req.get("Location")
     if Location is None:
         return jsonify(result)
@@ -49,6 +51,7 @@ def report_create():
     Category = req.get("Category")
     if Category is None:
         return jsonify(result)
+    IncidentID = str(id) + Category + Location + Year
     result = InsertIncident(IncidentID, Location, Latitude, Longitude, Year, Month, Day, Details, Category)
     return jsonify(result)
 
@@ -79,6 +82,7 @@ def getReportByCategory():
 def getReportByDate():
     result = {"Status": False, "Msg": "Date is lack of information"}
     req = request.get_json()
+    random.choice('abcdefghijklmnopqrstuvwxyz!@#$%^&*()')
     BeginYear = req.get("BeginYear")
     if BeginYear is None:
         return jsonify(result)
@@ -106,16 +110,16 @@ def getReportByDate():
 def getReportByLocation():
     result = {"Status": False, "Msg": "Date is lack of information", "Data": []}
     req = request.get_json()
-    longitude = req.get("longitude")
+    longitude = req.get("Longitude")
     if longitude is None:
         return jsonify(result)
-    latitude = req.get("latitude")
+    latitude = req.get("Latitude")
     if latitude is None:
         return jsonify(result)
-    longitudeDelta = req.get("longitudeDelta")
+    longitudeDelta = req.get("LongitudeDelta")
     if longitudeDelta is None:
         return jsonify(result)
-    latitudeDelta = req.get("latitudeDelta")
+    latitudeDelta = req.get("LatitudeDelta")
     if latitudeDelta is None:
         return jsonify(result)
 
